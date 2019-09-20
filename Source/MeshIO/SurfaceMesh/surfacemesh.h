@@ -14,23 +14,18 @@ class meshio::SurfaceMesh
 public:
     int total_shapes;
 
-    std::string type;
-
     std::vector<int> node_index;
+    std::vector<int> shape_types;
 
-    std::vector<meshio::Vertex> nodes;
+    std::vector<meshio::Node*> nodes;
+    std::vector<meshio::Cell*> cells;
     std::vector<meshio::Normal> normals;
     std::vector<meshio::Face> faces;
-    std::vector<meshio::Cell*> cells;
 
 
 
 
 public:
-    //IO Obj
-    //void ImportObj(std::string const& filename, bool verbose = false);
-    //void ExportObj(std::string const& filename, bool verbose = false);
-
     //IO Silo
     void ImportSilo(std::string const& filename, bool verbose = false);
     void ExportSilo(std::string const& filename, bool verbose = false);

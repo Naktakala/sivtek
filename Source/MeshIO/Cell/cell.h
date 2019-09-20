@@ -13,8 +13,6 @@ public:
     int cell_global_id;
     int cell_local_id;
     Vertex centroid;
-    std::vector<meshio::Face*> faces;
-
 
 public:
     Cell()

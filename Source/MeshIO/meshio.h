@@ -17,21 +17,14 @@ namespace meshio
     struct Matrix3x3;
 
     struct Face;
+    struct PolyFace;
 
     class SurfaceMesh;
 
-    class MeshContinuum;
-
-    class Boundary;
-
     class Cell;
-    class CellTriangle;
     class CellPolygon;
+    class CellPolyhedron;
 
-    class Region;
-    class EmptyRegion;
-
-    class VolumeMesher;
     struct CellIndexMap;
     typedef CellIndexMap NodeIndexMap;
 

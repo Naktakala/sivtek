@@ -1,11 +1,7 @@
 #include "surfacemesh.h"
 #include "../Cell/cell.h"
-#include "../Cell/cell_polygon.h"
+#include "../Cell/cell_polyhedron.h"
 
-#include <iostream>
-#include <string>
-
-#include <vtkCellType.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkDataSetMapper.h>
 #include <vtkUnstructuredGridWriter.h>
@@ -14,11 +10,6 @@
 
 #include <vtkCellArray.h>
 #include <vtkCellData.h>
-#include <vtkPointData.h>
-#include <vtkFieldData.h>
-#include <vtkDoubleArray.h>
-#include <vtkIntArray.h>
-#include <vtkStringArray.h>
 
 #include <vtkInformation.h>
 
@@ -56,9 +47,9 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
     for(int v = 0; v < nodes.size(); v++)
     {
         std::vector<double> d_node;
-        d_node.push_back(nodes[v].xComp);
-        d_node.push_back(nodes[v].zComp);
-        d_node.push_back(nodes[v].zComp);
+        d_node.push_back(nodes[v]->xComp);
+        d_node.push_back(nodes[v]->zComp);
+        d_node.push_back(nodes[v]->zComp);
 
         d_nodes.push_back(d_node);
 
@@ -86,10 +77,10 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
         int cell_node = node_index[c];
         auto cell = cells[cell_node];
 
-        auto poly_cell = (meshio::CellPolygon*)cell;
+        auto poly_cell = (meshio::CellPolyhedron*)cell;
         int num_verts = (int)poly_cell->vertex_indices.size();
 
-        if(verbose){std::cout << "Moving vertex:  " << c << " from cell: " << v << std::endl;}
+        if(verbose){std::cout << "Moving vertex:  " << c << std::endl;}
 
         std::vector<vtkIdType > cell_info((unsigned long)num_verts);
 
@@ -101,7 +92,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
         vtkSmartPointer<vtkCellArray> faces = vtkSmartPointer<vtkCellArray>::New();
 
-        int num_faces = (int)cell->faces.size();
+        int num_faces = (int)poly_cell->faces.size();
         for(int f = 0; f < num_faces; f++)
         {
             if(verbose){std::cout << "Moving face:  " << f << " from cell: " << c << std::endl;}

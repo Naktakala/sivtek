@@ -1,6 +1,5 @@
 #include "surfacemesh.h"
 
-#include <iostream>
 #include <iomanip>
 
 #include "silo.h"
@@ -51,6 +50,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 
     if(umesh->datatype == DB_DOUBLE)
     {
+
         //============================================= Looping through nodes for Vertices
         auto coord_x = (double*)umesh->coords[0];
         auto coord_y = (double*)umesh->coords[1];
@@ -58,11 +58,11 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 
         for(int v = 0; v < total_vertices; v++)
         {
-            auto* new_node = new meshio::Vertex;
+            auto* new_node = new meshio::Node;
             new_node->xComp = coord_x[v];
             new_node->yComp = coord_y[v];
             new_node->zComp = coord_z[v];
-            this->nodes.push_back(*new_node);
+            nodes.push_back(new_node);
 
             //============================================= Verbosity option
             if(verbose)
@@ -101,10 +101,20 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
         }
     }
 
+    //============================================= Gathering Shape Information
     this->total_shapes = umesh->zones->shapecnt[0];
 
+    for(int st = 0; st < total_shapes; st++)
+    {
+        //auto current_shape = umesh->zones->shapetype[st];
+        //this->shape_types.push_back(current_shape);
+        this->shape_types.push_back(30);
+    }
+
+    //============================================= Starting Shape Seperation
     this->SeperateShapes();
 
+    //============================================= Closing File
     DBClose(silo_file);
 
     //============================================= Verbose Commands
@@ -209,7 +219,7 @@ void meshio::SurfaceMesh::ExportSiloTest(bool verbose)
         3,3,13,6
     };
 
-    shape_type  = {DB_ZONETYPE_POLYHEDRON};
+    shape_type  = {DB_ZONETYPE_POLYHEDRON,DB_ZONETYPE_POLYHEDRON,DB_ZONETYPE_POLYHEDRON};
     shape_count = {3};
     shape_size  = {84};
 

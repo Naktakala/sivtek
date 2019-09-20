@@ -1,11 +1,10 @@
-#ifndef _MESH_CELL_POLYGON_
-#define _MESH_CELL_POLYGON_
+#ifndef _MESHIO_CELL_POLYGON_
+#define _MESHIO_CELL_POLYGON_
 
 #include "cell.h"
 
 class meshio::CellPolygon : public meshio::Cell
 {
-public:
 public:
 
     std::vector<int> vertex_indices;

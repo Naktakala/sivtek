@@ -12,9 +12,6 @@ public:
     typedef std::vector<meshio::SurfaceMesh*> SurfaceMeshCollection;
     std::vector<SurfaceMeshCollection*>       surfacemesh_collections;
     std::vector<meshio::SurfaceMesh*>         surfacemesh_stack;
-    std::vector<meshio::Region*>              region_stack;
-
-    meshio::VolumeMesher* volume_mesher;
 
     std::vector<meshio::Cell*> pcells;
 };

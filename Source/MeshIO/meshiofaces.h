@@ -65,8 +65,6 @@
 
 struct meshio::Face
 {
-    std::vector<int> face_nodes;
-
     std::vector<int> vertix_indices;
     std::vector<int> normal_indices;
     std::vector<int> edge_indeces;
@@ -81,6 +79,25 @@ struct meshio::Face
     bool invalidated;
 
     Face()
+    {
+        invalidated = false;
+    }
+
+};
+
+
+struct meshio::PolyFace
+{
+    std::vector<int> vertix_indices;
+    std::vector<int*> edges;
+    int face_indices[3];
+
+    meshio::Normal geometric_normal;
+    meshio::Vertex face_centroid;
+
+    bool invalidated;
+
+    PolyFace()
     {
         invalidated = false;
     }

@@ -1,9 +1,7 @@
 #include "main.h"
 
 #include "MeshIO/SurfaceMesh/surfacemesh.h"
-#include "MeshIO/MeshHandler/meshhandler.h"
 
-#include <iostream>
 
 
 int current_meshhandler;
@@ -21,13 +19,4 @@ int main(int argc,char **args)
     new_surfacemesh->ExportSiloTest(verbose);
     new_surfacemesh->ImportSilo("Test.silo", verbose);
     new_surfacemesh->ExportVTK("Test", verbose);
-
-
-
-
-    //auto* new_silohandler = new meshio::SiloHandler;
-    //new_silohandler->WriteSilo("Test.silo");
-    //new_silohandler->LoadSilo("Test.silo", driver_type, read_mode);
-    //new_silohandler->WriteSiloPDT("TestPDT.silo");
-    //new_silohandler->LoadSilo("TestPDT.silo", driver_type, read_mode);
 }
