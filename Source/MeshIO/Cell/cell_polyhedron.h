@@ -7,9 +7,11 @@
 class meshio::CellPolyhedron : public meshio::Cell
 {
 public:
-
     std::vector<int> vertex_indices;
     std::vector<meshio::PolyFace*> faces;
+
+public:
+    CellPolyhedron() : Cell(CellType::POLYHEDRON) {}
 };
 
 #endif // CELL_POLYHEDRON_H

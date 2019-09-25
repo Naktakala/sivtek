@@ -1,5 +1,8 @@
 #include "surfacemesh.h"
+
+#include "../Cell/cell.h"
 #include "../Cell/cell_polyhedron.h"
+
 
 #include <iomanip>
 
@@ -34,8 +37,6 @@ void meshio::SurfaceMesh::SeperateShapes()
     {
         if(shape_types[shape_count] == 30)
         {
-            std::cout << "Ima Polyhedron!" << std::endl;
-
             auto *new_cell = new meshio::CellPolyhedron;
 
             curloc++;
@@ -52,8 +53,8 @@ void meshio::SurfaceMesh::SeperateShapes()
                 {
                     curloc++;
                     new_face->vertix_indices.push_back(this->node_index.at((unsigned long) curloc));
+                    new_cell->vertex_indices.push_back(this->node_index.at((unsigned long) curloc));
                 }
-
                 new_cell->faces.push_back(new_face);
             }
             cells.push_back(new_cell);

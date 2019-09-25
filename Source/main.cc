@@ -8,7 +8,7 @@ int current_meshhandler;
 
 int main(int argc,char **args)
 {
-    bool verbose = true;
+    bool verbose = false;
 
     auto* new_meshhandler = new meshio::MeshHandler;
     meshhandler_stack.push_back(new_meshhandler);
