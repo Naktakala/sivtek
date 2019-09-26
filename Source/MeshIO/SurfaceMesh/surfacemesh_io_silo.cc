@@ -42,7 +42,9 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 
     //============================================= Setting Values
     int total_vertices = umesh->nnodes;
-    int total_nodes = umesh->zones->shapesize[0];
+    int total_nodes = umesh->zones->lnodelist;
+
+    std::cout << "Total Nodes: " << total_nodes << std::endl;
 
 
     //============================================= Information
@@ -102,7 +104,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
     }
 
     //============================================= Gathering Shape Information
-    this->total_shapes = umesh->zones->shapecnt[0];
+    this->total_shapes = umesh->zones->nshapes;
 
     for(int st = 0; st < total_shapes; st++)
     {

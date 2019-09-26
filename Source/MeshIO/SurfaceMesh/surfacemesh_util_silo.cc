@@ -3,7 +3,7 @@
 #include "../Cell/cell.h"
 #include "../Cell/cell_polyhedron.h"
 
-
+#include <set>
 #include <iomanip>
 
 // ****************************************************************************
@@ -42,6 +42,8 @@ void meshio::SurfaceMesh::SeperateShapes()
             curloc++;
             number_faces = this->node_index.at((unsigned long) curloc);
 
+            std::set<int> cell_verts;
+
             for(int f = 0; f < number_faces; f++)
             {
                 curloc++;
@@ -53,10 +55,14 @@ void meshio::SurfaceMesh::SeperateShapes()
                 {
                     curloc++;
                     new_face->vertix_indices.push_back(this->node_index.at((unsigned long) curloc));
-                    new_cell->vertex_indices.push_back(this->node_index.at((unsigned long) curloc));
+                   cell_verts.insert(this->node_index.at((unsigned long) curloc));
                 }
                 new_cell->faces.push_back(new_face);
             }
+
+            for(auto v : cell_verts)
+                new_cell->vertex_indices.push_back(v);
+
             cells.push_back(new_cell);
             shape_count++;
         }

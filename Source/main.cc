@@ -16,7 +16,7 @@ int main(int argc,char **args)
     auto* new_surfacemesh = new meshio::SurfaceMesh;
     new_meshhandler->surfacemesh_stack.push_back(new_surfacemesh);
 
-    new_surfacemesh->ExportSiloTest(verbose);
-    new_surfacemesh->ImportSilo("Test.silo", verbose);
-    new_surfacemesh->ExportVTK("Test", verbose);
+    //new_surfacemesh->ExportSiloTest(verbose);
+    new_surfacemesh->ImportSilo("A0a_AlignedX_Center_0.silo", verbose);
+    new_surfacemesh->ExportVTK("A0a_AlignedX_Center_0", verbose);
 }

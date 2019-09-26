@@ -53,7 +53,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
     {
         std::vector<double> d_node;
         d_node.push_back(nodes[v]->xComp);
-        d_node.push_back(nodes[v]->zComp);
+        d_node.push_back(nodes[v]->yComp);
         d_node.push_back(nodes[v]->zComp);
 
         d_nodes.push_back(d_node);
@@ -81,8 +81,8 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
     //============================================= Populating Cell info
     if(verbose){std::cout << "Populating Cell Info" << std::endl;}
 
-    //int number_cells = (int)cells.size();
-    int number_cells = 1;
+    int number_cells = (int)cells.size();
+    //int number_cells = 1;
 
     if(verbose){std::cout << "Total Cells: " << number_cells << std::endl;}
 
@@ -121,8 +121,9 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
                 for(int fv = 0; fv < num_fverts; fv++)
                 {
                     face[fv] = poly_cell->faces[f]->vertix_indices[fv];
-                    faces->InsertNextCell(num_fverts, face.data());
                 }
+
+                faces->InsertNextCell(num_fverts, face.data());
             }
             ugrid->InsertNextCell(VTK_POLYHEDRON, num_verts, cell_info.data(), num_faces, faces->GetPointer());
             //material_array->InsertNextValue(material_id);
@@ -162,9 +163,9 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
     }
 
     //============================================= Creating Filename
-    std::string base = "test";
+    //std::string base = filename;
     std::string ext = ".vtu";
-    std::string name = std::string(base);
+    std::string name = std::string(filename);
     std::string fname = name + ext;
 
     vtkXMLUnstructuredGridWriter* grid_writer = vtkXMLUnstructuredGridWriter::New();
