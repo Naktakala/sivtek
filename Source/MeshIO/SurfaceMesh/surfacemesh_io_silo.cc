@@ -1,7 +1,5 @@
 #include "surfacemesh.h"
 
-#include <iomanip>
-
 #include "silo.h"
 
 
@@ -29,8 +27,9 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
     DBtoc* table_contents = DBGetToc(silo_file);
     //std::cout << "\n" << table_contents->ucdmesh_names[0] << "\n";
 
-    //============================================= Creating Empty UCDMesh
+    //============================================= Creating Empty UCDMesh & Empty Material
     DBucdmesh* umesh = nullptr;
+    DBmaterial* umat = nullptr;
 
     //============================================= Checking to see if Mesh exists in file
     umesh = DBGetUcdmesh(silo_file, table_contents->ucdmesh_names[0]);
@@ -40,11 +39,25 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
         std::cout << "UCDMesh received nullptr. \n";
     }
 
+    //============================================= Checking to see if Mesh exists in file
+    umat = DBGetMaterial(silo_file, table_contents->mat_names[0]);
+    if(umat == nullptr)
+    {
+        umat = DBAllocMaterial();
+        std::cout << "Material received nullptr. \n";
+    }
+
+
     //============================================= Setting Values
     int total_vertices = umesh->nnodes;
     int total_nodes = umesh->zones->lnodelist;
+    int mat_id = umat->nmat;
+    int total_materials = umat->dims[0];
+
 
     std::cout << "Total Nodes: " << total_nodes << std::endl;
+    std::cout << "Total Materials IDs: " << mat_id << std::endl;
+    std::cout << "Total Materials Nodes: " << total_materials << std::endl;
 
 
     //============================================= Information
@@ -100,6 +113,27 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
                       std::fixed << std::setprecision(5) <<
                       current_node << "  " <<
                       std::endl;
+        }
+    }
+
+    //============================================= Gathering Material
+    if(verbose){std::cout << "\nMaterial Information: " << std::endl;}
+
+    if(umat->datatype == DB_DOUBLE)
+    {
+        for(int m = 0; m < mat_id; m++)
+        {
+            auto current_material_id = umat->matnos[m];
+            this->mat_index.push_back(current_material_id);
+
+            auto current_material_name = umat->matnames[m];
+            this->material_names.push_back(current_material_name);
+        }
+
+        for(int ml = 0; ml < total_materials; ml++)
+        {
+            auto cur_mat = umat->matlist[ml];
+            this->material_list.push_back(cur_mat);
         }
     }
 

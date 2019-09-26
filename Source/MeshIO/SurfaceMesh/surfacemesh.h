@@ -15,7 +15,12 @@ public:
     int total_shapes;
 
     std::vector<int> node_index;
+    std::vector<int> mat_index;
     std::vector<int> shape_types;
+
+    std::vector<int> material_list;
+
+    std::vector<std::string> material_names;
 
     std::vector<meshio::Node*> nodes;
     std::vector<meshio::Cell*> cells;

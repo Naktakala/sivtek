@@ -95,7 +95,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
         if(cell->Type() == meshio::CellType::POLYHEDRON)
         {
             auto poly_cell = (meshio::CellPolyhedron*)cell;
-            //int material_id = cell->material_id;
+            int material_id = cell->material_id;
 
             //============================================= Cell Info
             int num_verts = (int)poly_cell->vertex_indices.size();
@@ -126,7 +126,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
                 faces->InsertNextCell(num_fverts, face.data());
             }
             ugrid->InsertNextCell(VTK_POLYHEDRON, num_verts, cell_info.data(), num_faces, faces->GetPointer());
-            //material_array->InsertNextValue(material_id);
+            material_array->InsertNextValue(material_id);
         }//Polyhedra
 
 

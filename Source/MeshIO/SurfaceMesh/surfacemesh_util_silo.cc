@@ -55,7 +55,7 @@ void meshio::SurfaceMesh::SeperateShapes()
                 {
                     curloc++;
                     new_face->vertix_indices.push_back(this->node_index.at((unsigned long) curloc));
-                   cell_verts.insert(this->node_index.at((unsigned long) curloc));
+                    cell_verts.insert(this->node_index.at((unsigned long) curloc));
                 }
                 new_cell->faces.push_back(new_face);
             }
@@ -63,9 +63,11 @@ void meshio::SurfaceMesh::SeperateShapes()
             for(auto v : cell_verts)
                 new_cell->vertex_indices.push_back(v);
 
+            auto temp_mat = this->material_list[shape_count];
+            new_cell->material_id = temp_mat;
+
             cells.push_back(new_cell);
             shape_count++;
         }
     }
-
 }
