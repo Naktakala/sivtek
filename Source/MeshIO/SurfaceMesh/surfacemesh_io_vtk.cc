@@ -170,6 +170,8 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
     vtkXMLUnstructuredGridWriter* grid_writer = vtkXMLUnstructuredGridWriter::New();
 
+    ugrid->GetCellData()->AddArray(material_array);
+
     grid_writer->SetInputData(ugrid);
     grid_writer->SetFileName(fname.c_str());
 
