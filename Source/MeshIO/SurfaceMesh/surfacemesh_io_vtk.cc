@@ -17,6 +17,7 @@
 #include <vtkInformation.h>
 #include <vtkIntArray.h>
 
+#include <chrono>
 
 
 extern std::vector<meshio::MeshHandler*> meshhandler_stack;
@@ -25,8 +26,8 @@ extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ImportVTK(std::string const &filename, bool verbose)
-{}
+void meshio::SurfaceMesh::ImportVTK(std::string const &filename, bool verbose, bool timer)
+{if(verbose || timer){}}
 
 
 
@@ -34,13 +35,17 @@ void meshio::SurfaceMesh::ImportVTK(std::string const &filename, bool verbose)
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
+void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, bool timer)
 {
     if(verbose)
     {
         std::cout << "\n==================================================" << std::endl;
         std::cout << "Commencing VTK Export." << std::endl;
     }
+
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+
 
     //============================================= Dumping Vertices
     if(verbose){std::cout << "Dumping Vertex." << std::endl;}
@@ -63,6 +68,13 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
     if(verbose){std::cout << "Finishing Vertex Dump." << std::endl;}
 
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto d1 = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+
+    if(timer){std::cout << "ExportVTK(): Dumping Vertices Execution Time: " << d1 << " ms" << std::endl;}
+
+
     //============================================= Init grid and material name
 
     if(verbose){std::cout << "Creating Grids." << std::endl;}
@@ -78,10 +90,11 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
     if(verbose){std::cout << "Finishing Grids." << std::endl;}
 
+
     //============================================= Populating Cell info
     if(verbose){std::cout << "Populating Cell Info" << std::endl;}
 
-    int number_cells = (int)cells.size();
+    auto number_cells = (int)cells.size();
     //int number_cells = 1;
 
     if(verbose){std::cout << "Total Cells: " << number_cells << std::endl;}
@@ -98,7 +111,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
             int material_id = cell->material_id;
 
             //============================================= Cell Info
-            int num_verts = (int)poly_cell->vertex_indices.size();
+            auto num_verts = (int)poly_cell->vertex_indices.size();
             std::vector<vtkIdType> cell_info((unsigned long) num_verts);
 
             for(int v = 0; v < num_verts; v++)
@@ -110,12 +123,12 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
             vtkSmartPointer<vtkCellArray> faces = vtkSmartPointer<vtkCellArray>::New();
 
-            int num_faces = (int)poly_cell->faces.size();
+            auto num_faces = (int)poly_cell->faces.size();
             for(int f = 0; f < num_faces; f++)
             {
                 if(verbose){std::cout << "Moving face:  " << f + 1 << " from cell: " << c + 1 << std::endl;}
 
-                int num_fverts = (int)poly_cell->faces[f]->vertix_indices.size();
+                auto num_fverts = (int)poly_cell->faces[f]->vertix_indices.size();
                 std::vector<vtkIdType> face((unsigned long) num_fverts);
 
                 for(int fv = 0; fv < num_fverts; fv++)
@@ -129,7 +142,6 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
             material_array->InsertNextValue(material_id);
         }//Polyhedra
 
-
         //============================================= Polygon
         if(cell->Type() == meshio::CellType::POLYGON)
         {
@@ -139,7 +151,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
 
             //============================================= Cell Info
             std::vector<vtkIdType> cell_info;
-            int  num_verts = (int) poly_cell->vertex_indices.size();
+            auto num_verts = (int) poly_cell->vertex_indices.size();
 
             for(int v = 0; v < num_verts; v++)
             {
@@ -162,8 +174,13 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
         std::cout << "Finished Populating Cell Info." << std::endl;
     }
 
+
+    auto t3 = std::chrono::high_resolution_clock::now();
+    auto d2 = std::chrono::duration_cast<std::chrono::milliseconds>( t3 - t2 ).count();
+    if(timer){std::cout << "ExportVTK(): Populating Cells Execution Time: " << d2 << " ms" << std::endl;}
+
+
     //============================================= Creating Filename
-    //std::string base = filename;
     std::string ext = ".vtu";
     std::string name = std::string(filename);
     std::string fname = name + ext;
@@ -175,7 +192,20 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose)
     grid_writer->SetInputData(ugrid);
     grid_writer->SetFileName(fname.c_str());
 
+    auto ft1 = std::chrono::high_resolution_clock::now();
+
+    // Average 5500ms for a 9 mil cells
     grid_writer->Write();
+
+    auto ft2 = std::chrono::high_resolution_clock::now();
+    auto fd1 = std::chrono::duration_cast<std::chrono::milliseconds>( ft2 - ft1 ).count();
+    if(timer){std::cout << "ExportVTK(): Writing Grid Execution Time: " << fd1 << " ms" << std::endl;}
+
+
+    auto t4 = std::chrono::high_resolution_clock::now();
+    auto d3 = std::chrono::duration_cast<std::chrono::milliseconds>( t4 - t1 ).count();
+    if(timer){std::cout << "ExportVTK(): Total Execution Time: " << d3 << " ms\n" << std::endl;}
+
 
     //============================================= Verbose Commands
     if(verbose){std::cout << "==================================================" << std::endl;}

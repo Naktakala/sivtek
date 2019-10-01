@@ -1,5 +1,5 @@
-#ifndef _MESH_SURFACEMESH_
-#define _MESH_SURFACEMESH_
+#ifndef _MESHIO_SURFACEMESH_
+#define _MESHIO_SURFACEMESH_
 
 #include <cstdio>
 #include <vector>
@@ -32,20 +32,16 @@ public:
 
 public:
     //IO Silo
-    void ImportSilo(std::string const& filename, bool verbose = false);
-    void ExportSilo(std::string const& filename, bool verbose = false);
-    void ExportSiloTest(bool verbose = false);
+    void ImportSilo(std::string const& filename, bool verbose = false, bool timer = false);
+    void ExportSilo(std::string const& filename, bool verbose = false, bool timer = false);
+    void ExportSiloTest(bool verbose = false, bool timer = false);
 
     //IO VTK
-    void ImportVTK(std::string const& filename, bool verbose = false);
-    void ExportVTK(std::string const& filename, bool verbose = false);
-
-    // Utilities
-    void UpdateConnections();
+    void ImportVTK(std::string const& filename, bool verbose = false, bool timer = false);
+    void ExportVTK(std::string const& filename, bool verbose = false, bool timer = false);
 
     //Util Silo
-    void CreateFaces();
-    void SeperateShapes();
+    void SeparateShapes(bool verbose = false, bool timer = false);
 
 };
 

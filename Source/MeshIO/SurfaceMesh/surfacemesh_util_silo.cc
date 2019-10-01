@@ -6,33 +6,21 @@
 #include <set>
 #include <iomanip>
 
-// ****************************************************************************
-//
-// ****************************************************************************
-void meshio::SurfaceMesh::CreateFaces()
-{
-
-}
-
 
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::SeperateShapes()
+void meshio::SurfaceMesh::SeparateShapes(bool verbose, bool timer)
 {
+    if(verbose || timer){}
+
     int curloc = -1;
     int shape_count = 0;
     int number_faces = 0;
     int number_verts = 0;
 
-    int stype = (int)shape_types.size();
-    std::cout << "\n" << std::endl;
-    //for(int s = 0; s < stype; s++)
-    //{
-    //    std::cout << shape_types[s] << std::endl;
-    //}
+    //auto stype = (int)shape_types.size();
 
-    //std::cout << shape_types.size() << std::endl;
     while(shape_count < this->total_shapes)
     {
         if(shape_types[shape_count] == 30)

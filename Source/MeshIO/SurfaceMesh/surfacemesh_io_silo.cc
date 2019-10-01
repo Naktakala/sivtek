@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <chrono>
 
 #include "surfacemesh.h"
 
@@ -11,13 +12,16 @@ extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
+void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, bool timer)
 {
+    auto t1 = std::chrono::high_resolution_clock::now();
+
     //============================================= Verbose Commands
     if(verbose)
     {
         std::cout << "\n==================================================" << std::endl;
     }
+
 
     //============================================= Opening & Testing file
     DBfile* silo_file = DBOpen(filename.c_str(), DB_PDB, DB_READ);
@@ -27,7 +31,6 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 
     //============================================= Reading Silo Table of Contents
     DBtoc* table_contents = DBGetToc(silo_file);
-    //std::cout << "\n" << table_contents->ucdmesh_names[0] << "\n";
 
     //============================================= Creating Empty UCDMesh & Empty Material
     DBucdmesh* umesh = nullptr;
@@ -59,15 +62,15 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 
     std::cout << "Total Nodes: " << total_nodes << std::endl;
     std::cout << "Total Materials IDs: " << mat_id << std::endl;
-    std::cout << "Total Materials Nodes: " << total_materials << std::endl;
+    std::cout << "Total Materials Nodes: " << total_materials << "\n" << std::endl;
 
+    auto t2 = std::chrono::high_resolution_clock::now();
 
     //============================================= Information
     if(verbose){std::cout << "\nVertex Information: " << std::endl;}
 
     if(umesh->datatype == DB_DOUBLE)
     {
-
         //============================================= Looping through nodes for Vertices
         auto coord_x = (double*)umesh->coords[0];
         auto coord_y = (double*)umesh->coords[1];
@@ -100,6 +103,12 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
     //============================================= Gathering nodelist
     if(verbose){std::cout << "\n\nNode Information: " << std::endl;}
 
+
+    auto t3 = std::chrono::high_resolution_clock::now();
+    auto d1 = std::chrono::duration_cast<std::chrono::milliseconds>( t3 - t2 ).count();
+    if(timer){std::cout << "ImportSilo(): Getting Mesh Execution Time: " << d1 << " ms" << std::endl;}
+
+
     for(int n = 0; n < total_nodes; n++)
     {
         auto current_node = umesh->zones->nodelist[n];
@@ -118,6 +127,12 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
         }
     }
 
+
+    auto t4 = std::chrono::high_resolution_clock::now();
+    auto d2 = std::chrono::duration_cast<std::chrono::milliseconds>( t4 - t3 ).count();
+    if(timer){std::cout << "ImportSilo(): Getting Nodes Execution Time: " << d2 << " ms" << std::endl;}
+
+
     //============================================= Gathering Material
     if(verbose){std::cout << "\nMaterial Information: " << std::endl;}
 
@@ -129,7 +144,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
             this->mat_index.push_back(current_material_id);
 
             auto current_material_name = umat->matnames[m];
-            this->material_names.push_back(current_material_name);
+            this->material_names.emplace_back(current_material_name);
         }
 
         for(int ml = 0; ml < total_materials; ml++)
@@ -138,6 +153,12 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
             this->material_list.push_back(cur_mat);
         }
     }
+
+
+    auto t5 = std::chrono::high_resolution_clock::now();
+    auto d3 = std::chrono::duration_cast<std::chrono::milliseconds>( t5 - t4 ).count();
+    if(timer){std::cout << "ImportSilo(): Getting Materials Execution Time: " << d3 << " ms" << std::endl;}
+
 
     //============================================= Gathering Shape Information
     this->total_shapes = umesh->zones->nshapes;
@@ -149,11 +170,28 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
         this->shape_types.push_back(30);
     }
 
+    auto t6 = std::chrono::high_resolution_clock::now();
+    auto d4 = std::chrono::duration_cast<std::chrono::milliseconds>( t6 - t5 ).count();
+    if(timer){std::cout << "ImportSilo(): Getting Shape Info Execution Time: " << d4 << " ms" << std::endl;}
+
+
     //============================================= Starting Shape Seperation
-    this->SeperateShapes();
+    this->SeparateShapes(verbose, timer);
+
+
+    auto t7 = std::chrono::high_resolution_clock::now();
+    auto d5 = std::chrono::duration_cast<std::chrono::milliseconds>( t7 - t6 ).count();
+    if(timer){std::cout << "ImportSilo(): Separating Shapes Execution Time: " << d5 << " ms" << std::endl;}
+
 
     //============================================= Closing File
     DBClose(silo_file);
+
+
+    auto t8 = std::chrono::high_resolution_clock::now();
+    auto d6 = std::chrono::duration_cast<std::chrono::milliseconds>( t8 - t1 ).count();
+    if(timer){std::cout << "ImportSilo(): Total Execution Time: " << d6 << " ms\n" << std::endl;}
+
 
     //============================================= Verbose Commands
     if(verbose){std::cout << "==================================================" << std::endl;}
@@ -165,8 +203,10 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose)
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportSilo(std::string const &filename, bool verbose)
-{}
+void meshio::SurfaceMesh::ExportSilo(std::string const &filename, bool verbose, bool timer)
+{
+    if(verbose || timer){}
+}
 
 
 
@@ -174,9 +214,11 @@ void meshio::SurfaceMesh::ExportSilo(std::string const &filename, bool verbose)
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportSiloTest(bool verbose)
+void meshio::SurfaceMesh::ExportSiloTest(bool verbose, bool timer)
 {
     std::string filename = "Test.silo";
+
+    if(verbose || timer){}
 
     //============================================= Verbose Commands
     if(verbose)
