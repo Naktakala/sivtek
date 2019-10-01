@@ -7,7 +7,7 @@
 
 #include "../meshio.h"
 
-//TODO Move SurfaceMesh to VolumeMesher
+//TODO Move MeshContinuum to VolumeMesher
 
 class meshio::SurfaceMesh
 {
@@ -33,11 +33,9 @@ public:
 public:
     //IO Silo
     void ImportSilo(std::string const& filename, bool verbose = false, bool timer = false);
-    void ExportSilo(std::string const& filename, bool verbose = false, bool timer = false);
     void ExportSiloTest(bool verbose = false, bool timer = false);
 
     //IO VTK
-    void ImportVTK(std::string const& filename, bool verbose = false, bool timer = false);
     void ExportVTK(std::string const& filename, bool verbose = false, bool timer = false);
 
     //Util Silo

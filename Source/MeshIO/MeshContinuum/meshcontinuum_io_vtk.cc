@@ -1,4 +1,4 @@
-#include "surfacemesh.h"
+#include "meshcontinuum.h"
 
 #include "../Cell/cell.h"
 #include "../Cell/cell_polygon.h"
@@ -21,15 +21,6 @@
 
 
 extern std::vector<meshio::MeshHandler*> meshhandler_stack;
-
-
-// ****************************************************************************
-//
-// ****************************************************************************
-void meshio::SurfaceMesh::ImportVTK(std::string const &filename, bool verbose, bool timer)
-{if(verbose || timer){}}
-
-
 
 
 // ****************************************************************************

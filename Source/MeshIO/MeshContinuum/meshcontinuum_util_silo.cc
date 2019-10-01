@@ -1,4 +1,4 @@
-#include "surfacemesh.h"
+#include "meshcontinuum.h"
 
 #include "../Cell/cell.h"
 #include "../Cell/cell_polyhedron.h"

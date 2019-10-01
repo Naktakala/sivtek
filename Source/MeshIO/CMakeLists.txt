@@ -1,6 +1,6 @@
 add_subdirectory(Cell)
 add_subdirectory(MeshHandler)
-add_subdirectory(SurfaceMesh)
+add_subdirectory(MeshContinuum)
 
 target_sources(sivtek PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/meshio.h

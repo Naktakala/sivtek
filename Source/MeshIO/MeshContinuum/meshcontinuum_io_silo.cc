@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <chrono>
 
-#include "surfacemesh.h"
+#include "meshcontinuum.h"
 
 #include "silo.h"
 
@@ -196,18 +196,6 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     //============================================= Verbose Commands
     if(verbose){std::cout << "==================================================" << std::endl;}
 }
-
-
-
-
-// ****************************************************************************
-//
-// ****************************************************************************
-void meshio::SurfaceMesh::ExportSilo(std::string const &filename, bool verbose, bool timer)
-{
-    if(verbose || timer){}
-}
-
 
 
 

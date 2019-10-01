@@ -1,8 +1,6 @@
 #ifndef _MESHIO_
 #define _MESHIO_
 
-#include "../LogIO/logio.h"
-
 #include <vector>
 
 namespace meshio

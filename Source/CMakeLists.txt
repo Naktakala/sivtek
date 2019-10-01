@@ -1,5 +1,3 @@
-add_subdirectory(TextIO)
-add_subdirectory(LogIO)
 add_subdirectory(MeshIO)
 add_subdirectory(TimerIO)
 

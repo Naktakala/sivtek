@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "MeshIO/SurfaceMesh/surfacemesh.h"
+#include "MeshIO/MeshContinuum/meshcontinuum.h"
 
 #include <string>
 #include <chrono>
