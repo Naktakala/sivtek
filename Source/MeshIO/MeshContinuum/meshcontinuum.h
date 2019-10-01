@@ -7,7 +7,6 @@
 
 #include "../meshio.h"
 
-//TODO Move MeshContinuum to VolumeMesher
 
 class meshio::SurfaceMesh
 {
@@ -24,16 +23,11 @@ public:
 
     std::vector<meshio::Node*> nodes;
     std::vector<meshio::Cell*> cells;
-    std::vector<meshio::Normal> normals;
-    std::vector<meshio::Face> faces;
-
-
-
 
 public:
     //IO Silo
     void ImportSilo(std::string const& filename, bool verbose = false, bool timer = false);
-    void ExportSiloTest(bool verbose = false, bool timer = false);
+    void ExportSiloTest(bool verbose = false);
 
     //IO VTK
     void ExportVTK(std::string const& filename, bool verbose = false, bool timer = false);

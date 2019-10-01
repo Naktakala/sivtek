@@ -1,7 +1,8 @@
+#include "meshcontinuum.h"
+
 #include <iomanip>
 #include <chrono>
 
-#include "meshcontinuum.h"
 
 #include "silo.h"
 
@@ -14,6 +15,7 @@ extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 // ****************************************************************************
 void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, bool timer)
 {
+    //============================================= Setting timer
     auto t1 = std::chrono::high_resolution_clock::now();
 
     //============================================= Verbose Commands
@@ -64,7 +66,10 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     std::cout << "Total Materials IDs: " << mat_id << std::endl;
     std::cout << "Total Materials Nodes: " << total_materials << "\n" << std::endl;
 
+
+    //============================================= Setting timer
     auto t2 = std::chrono::high_resolution_clock::now();
+
 
     //============================================= Information
     if(verbose){std::cout << "\nVertex Information: " << std::endl;}
@@ -104,6 +109,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     if(verbose){std::cout << "\n\nNode Information: " << std::endl;}
 
 
+    //============================================= Setting timer
     auto t3 = std::chrono::high_resolution_clock::now();
     auto d1 = std::chrono::duration_cast<std::chrono::milliseconds>( t3 - t2 ).count();
     if(timer){std::cout << "ImportSilo(): Getting Mesh Execution Time: " << d1 << " ms" << std::endl;}
@@ -128,6 +134,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     }
 
 
+    //============================================= Setting timer
     auto t4 = std::chrono::high_resolution_clock::now();
     auto d2 = std::chrono::duration_cast<std::chrono::milliseconds>( t4 - t3 ).count();
     if(timer){std::cout << "ImportSilo(): Getting Nodes Execution Time: " << d2 << " ms" << std::endl;}
@@ -155,6 +162,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     }
 
 
+    //============================================= Setting timer
     auto t5 = std::chrono::high_resolution_clock::now();
     auto d3 = std::chrono::duration_cast<std::chrono::milliseconds>( t5 - t4 ).count();
     if(timer){std::cout << "ImportSilo(): Getting Materials Execution Time: " << d3 << " ms" << std::endl;}
@@ -170,6 +178,8 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
         this->shape_types.push_back(30);
     }
 
+
+    //============================================= Setting timer
     auto t6 = std::chrono::high_resolution_clock::now();
     auto d4 = std::chrono::duration_cast<std::chrono::milliseconds>( t6 - t5 ).count();
     if(timer){std::cout << "ImportSilo(): Getting Shape Info Execution Time: " << d4 << " ms" << std::endl;}
@@ -179,6 +189,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     this->SeparateShapes(verbose, timer);
 
 
+    //============================================= Setting timer
     auto t7 = std::chrono::high_resolution_clock::now();
     auto d5 = std::chrono::duration_cast<std::chrono::milliseconds>( t7 - t6 ).count();
     if(timer){std::cout << "ImportSilo(): Separating Shapes Execution Time: " << d5 << " ms" << std::endl;}
@@ -188,6 +199,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     DBClose(silo_file);
 
 
+    //============================================= Setting timer
     auto t8 = std::chrono::high_resolution_clock::now();
     auto d6 = std::chrono::duration_cast<std::chrono::milliseconds>( t8 - t1 ).count();
     if(timer){std::cout << "ImportSilo(): Total Execution Time: " << d6 << " ms\n" << std::endl;}
@@ -202,11 +214,9 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportSiloTest(bool verbose, bool timer)
+void meshio::SurfaceMesh::ExportSiloTest(bool verbose)
 {
     std::string filename = "Test.silo";
-
-    if(verbose || timer){}
 
     //============================================= Verbose Commands
     if(verbose)

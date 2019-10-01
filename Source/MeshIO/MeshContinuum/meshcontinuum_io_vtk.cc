@@ -60,9 +60,9 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
     if(verbose){std::cout << "Finishing Vertex Dump." << std::endl;}
 
 
+    //============================================= Setting timer
     auto t2 = std::chrono::high_resolution_clock::now();
     auto d1 = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
-
     if(timer){std::cout << "ExportVTK(): Dumping Vertices Execution Time: " << d1 << " ms" << std::endl;}
 
 
@@ -166,6 +166,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
     }
 
 
+    //============================================= Setting timer
     auto t3 = std::chrono::high_resolution_clock::now();
     auto d2 = std::chrono::duration_cast<std::chrono::milliseconds>( t3 - t2 ).count();
     if(timer){std::cout << "ExportVTK(): Populating Cells Execution Time: " << d2 << " ms" << std::endl;}
@@ -174,7 +175,9 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
     //============================================= Creating Filename
     std::string ext = ".vtu";
     std::string name = std::string(filename);
-    std::string fname = name + ext;
+    size_t lastindex = name.find_last_of('.');
+    std::string rawname = name.substr(0, lastindex);
+    std::string fname = rawname + ext;
 
     vtkXMLUnstructuredGridWriter* grid_writer = vtkXMLUnstructuredGridWriter::New();
 
@@ -185,14 +188,16 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
 
     auto ft1 = std::chrono::high_resolution_clock::now();
 
-    // Average 5500ms for a 9 mil cells
+    // Average 5500ms for 9 mil cells
     grid_writer->Write();
 
+    //============================================= Setting timer
     auto ft2 = std::chrono::high_resolution_clock::now();
     auto fd1 = std::chrono::duration_cast<std::chrono::milliseconds>( ft2 - ft1 ).count();
     if(timer){std::cout << "ExportVTK(): Writing Grid Execution Time: " << fd1 << " ms" << std::endl;}
 
 
+    //============================================= Setting timer
     auto t4 = std::chrono::high_resolution_clock::now();
     auto d3 = std::chrono::duration_cast<std::chrono::milliseconds>( t4 - t1 ).count();
     if(timer){std::cout << "ExportVTK(): Total Execution Time: " << d3 << " ms\n" << std::endl;}
