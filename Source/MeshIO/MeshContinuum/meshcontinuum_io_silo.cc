@@ -62,9 +62,10 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
     int total_materials = umat->dims[0];
 
 
-    std::cout << "Total Nodes: " << total_nodes << std::endl;
-    std::cout << "Total Materials IDs: " << mat_id << std::endl;
-    std::cout << "Total Materials Nodes: " << total_materials << "\n" << std::endl;
+    std::cout << "Imported Mesh Information: " << std::endl;
+    std::cout << "  Total Nodes:           " << total_nodes << std::endl;
+    std::cout << "  Total Materials IDs:   " << mat_id << std::endl;
+    std::cout << "  Total Materials Nodes: " << total_materials << "\n" << std::endl;
 
 
     //============================================= Setting timer

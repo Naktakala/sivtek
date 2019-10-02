@@ -11,10 +11,25 @@ int current_meshhandler;
 int main(int argc,char **args)
 {
     //============================================= Setting up information
-    auto t1 = std::chrono::high_resolution_clock::now();
-
     bool verbose = false;
-    bool timer = true;
+    bool timer = false;
+
+
+    //============================================= Rudimentary Check
+    // Checks to see if the second argument is specified.
+    if(argc == 1)
+    {
+        std::cout << "Program was called, without any commands?" << std::endl;
+    }
+    else if(argc < 2)
+    {
+        std::cout << "A file was not specified." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+
+    //============================================= Start Timer
+    auto t1 = std::chrono::high_resolution_clock::now();
 
 
     //============================================= Creating Handlers
@@ -31,7 +46,14 @@ int main(int argc,char **args)
 
     //============================================= Function Calls
     new_surfacemesh->ImportSilo(filename, verbose, timer);
+    std::cout <<
+        "Silo Import Finished." << "\n\n" <<
+        "Starting VTK Export." << "\n" <<
+    std::endl;
     new_surfacemesh->ExportVTK(filename, verbose, timer);
+    std::cout <<
+        "Finishing VTK Export." << "\n" <<
+    std::endl;
 
 
     //============================================= Printing out execution time
