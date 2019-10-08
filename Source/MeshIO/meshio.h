@@ -26,6 +26,9 @@ namespace meshio
     struct CellIndexMap;
     typedef CellIndexMap NodeIndexMap;
 
+    //class GridSurgeon;
+    //class GridSurgeonUnstructured;
+
     MeshHandler*           GetCurrentHandler();
 }
 

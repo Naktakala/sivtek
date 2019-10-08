@@ -1,5 +1,5 @@
-#ifndef _MESHIO_SURFACEMESH_
-#define _MESHIO_SURFACEMESH_
+#ifndef _MESHIO_MESHCONTINUUM_
+#define _MESHIO_MESHCONTINUUM_
 
 #include <cstdio>
 #include <vector>
@@ -31,6 +31,7 @@ public:
 
     //IO VTK
     void ExportVTK(std::string const& filename, bool verbose = false, bool timer = false);
+    void ExportVTKTest(std::string const& filename, bool verbose = false, bool timer = false);
 
     //Util Silo
     void SeparateShapes(bool verbose = false, bool timer = false);
