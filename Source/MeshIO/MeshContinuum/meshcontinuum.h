@@ -8,7 +8,7 @@
 #include "../meshio.h"
 
 
-class meshio::SurfaceMesh
+class meshio::MeshContinuum
 {
 public:
     int total_shapes;
@@ -25,6 +25,7 @@ public:
     std::vector<meshio::Cell*> cells;
 
 public:
+
     //IO Silo
     void ImportSilo(std::string const& filename, bool verbose = false, bool timer = false);
     void ExportSiloTest(bool verbose = false);
@@ -33,9 +34,12 @@ public:
     void ExportVTK(std::string const& filename, bool verbose = false, bool timer = false);
     void ExportVTKTest(std::string const& filename, bool verbose = false, bool timer = false);
 
+    //IO Silo
+    void ImportAbaqus(std::string const& filename, bool verbose = false, bool timer = false);
+
+
     //Util Silo
     void SeparateShapes(bool verbose = false, bool timer = false);
-
 };
 
 #endif // SURFACEMESH_H

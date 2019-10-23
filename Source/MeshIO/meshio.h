@@ -17,7 +17,7 @@ namespace meshio
     struct Face;
     struct PolyFace;
 
-    class SurfaceMesh;
+    class MeshContinuum;
 
     class Cell;
     class CellPolygon;

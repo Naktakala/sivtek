@@ -33,7 +33,7 @@ extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, bool timer)
+void meshio::MeshContinuum::ExportVTK(std::string const &filename, bool verbose, bool timer)
 {
     if(verbose)
     {
