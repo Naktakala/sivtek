@@ -17,7 +17,7 @@ namespace meshio
     struct Face;
     struct PolyFace;
 
-    class SurfaceMesh;
+    class MeshContinuum;
 
     class Cell;
     class CellPolygon;
@@ -25,6 +25,9 @@ namespace meshio
 
     struct CellIndexMap;
     typedef CellIndexMap NodeIndexMap;
+
+    //class GridSurgeon;
+    //class GridSurgeonUnstructured;
 
     MeshHandler*           GetCurrentHandler();
 }

@@ -1,5 +1,5 @@
-#ifndef _MESH_CELL_
-#define _MESH_CELL_
+#ifndef _MESHIO_CELL_
+#define _MESHIO_CELL_
 
 #include "../meshio.h"
 
@@ -11,7 +11,7 @@
 // Copying Similar Structure of naming cell types from ChiTech
 namespace meshio
 {
-    enum class CellType
+enum class CellType
     {
         GHOST = 0,
         SLAB = 1,
@@ -29,26 +29,26 @@ namespace meshio
 class meshio::Cell
 {
 public:
-    int cell_global_id;
-    int cell_local_id;
-    int material_id;
-    Vertex centroid;
+  int cell_global_id;
+  int cell_local_id;
+  int material_id;
+  Vertex centroid;
 
 private:
-    const CellType cell_type;
+  const CellType cell_type;
 
 public:
-    explicit Cell(CellType in_cell_type) : cell_type(in_cell_type)
-    {
-        cell_global_id = -1;
-        cell_local_id = -1;
+  explicit Cell(CellType in_cell_type) : cell_type(in_cell_type)
+  {
+    cell_global_id = -1;
+    cell_local_id = -1;
 
-        material_id = -1;
-    }
+    material_id = -1;
+  }
 
-    virtual ~Cell() {}
+  virtual ~Cell() = default;
 
 public:
-    const CellType Type() {return cell_type;}
+  const CellType Type() {return cell_type;}
 };
 #endif //CELL_H

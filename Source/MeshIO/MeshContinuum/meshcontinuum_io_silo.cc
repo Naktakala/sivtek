@@ -13,7 +13,7 @@ extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, bool timer)
+void meshio::MeshContinuum::ImportSilo(std::string const &filename, bool verbose, bool timer)
 {
     //============================================= Setting timer
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -215,7 +215,7 @@ void meshio::SurfaceMesh::ImportSilo(std::string const &filename, bool verbose, 
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportSiloTest(bool verbose)
+void meshio::MeshContinuum::ExportSiloTest(bool verbose)
 {
     std::string filename = "Test.silo";
 

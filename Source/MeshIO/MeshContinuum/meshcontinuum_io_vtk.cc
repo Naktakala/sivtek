@@ -4,6 +4,11 @@
 #include "../Cell/cell_polygon.h"
 #include "../Cell/cell_polyhedron.h"
 
+#include "ParaviewFunctions/vtkCleanUnstructuredGrid.h"
+
+#include <vtkPolyData.h>
+#include <vtkCleanPolyData.h>
+#include <vtkGeometryFilter.h>
 
 #include <vtkUnstructuredGrid.h>
 #include <vtkDataSetMapper.h>
@@ -20,13 +25,15 @@
 #include <chrono>
 
 
+
+
 extern std::vector<meshio::MeshHandler*> meshhandler_stack;
 
 
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, bool timer)
+void meshio::MeshContinuum::ExportVTK(std::string const &filename, bool verbose, bool timer)
 {
     if(verbose)
     {
@@ -78,6 +85,7 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
 
     material_array->SetName("Material");
     ugrid->SetPoints(points);
+
 
     if(verbose){std::cout << "Finishing Grids." << std::endl;}
 
@@ -179,16 +187,28 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
     std::string rawname = name.substr(0, lastindex);
     std::string fname = rawname + ext;
 
-    vtkXMLUnstructuredGridWriter* grid_writer = vtkXMLUnstructuredGridWriter::New();
-
     ugrid->GetCellData()->AddArray(material_array);
 
-    grid_writer->SetInputData(ugrid);
+    //============================================= Cleaning test
+    vtkCleanUnstructuredGrid* clean_grid = vtkCleanUnstructuredGrid::New();
+    clean_grid->SetInputData(ugrid);
+    clean_grid->Update();
+
+    std::cout <<
+    "Original Points: " << ugrid->GetNumberOfPoints() << "\n"
+    "Clean Points: " << clean_grid->GetOutput()->GetNumberOfPoints() << "\n" <<
+    std::endl;
+
+
+    vtkXMLUnstructuredGridWriter* grid_writer = vtkXMLUnstructuredGridWriter::New();
+
+    //grid_writer->SetInputData(ugrid);
+    grid_writer->SetInputData(clean_grid->GetOutput());
     grid_writer->SetFileName(fname.c_str());
 
     auto ft1 = std::chrono::high_resolution_clock::now();
 
-    // Average 5500ms for 9 mil cells
+    // Average 5500ms
     grid_writer->Write();
 
     //============================================= Setting timer
@@ -207,3 +227,4 @@ void meshio::SurfaceMesh::ExportVTK(std::string const &filename, bool verbose, b
     if(verbose){std::cout << "==================================================" << std::endl;}
 
 }
+

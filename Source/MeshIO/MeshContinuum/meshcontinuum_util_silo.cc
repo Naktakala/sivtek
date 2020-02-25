@@ -10,7 +10,7 @@
 // ****************************************************************************
 //
 // ****************************************************************************
-void meshio::SurfaceMesh::SeparateShapes(bool verbose, bool timer)
+void meshio::MeshContinuum::SeparateShapes(bool verbose, bool timer)
 {
     if(verbose || timer){}
 
